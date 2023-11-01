@@ -9,3 +9,9 @@ type SendMailerRequest struct {
 type AIGetBodyMailerRequest struct {
 	Prompt string `json:"prompt"`
 }
+
+type SendWithAIMailerRequest struct {
+	Prompt  string   `json:"prompt"`
+	Subject string   `json:"subject"`
+	Email   []string `json:"email"`
+}

@@ -4,13 +4,14 @@ import (
 	"crypto/tls"
 	"log"
 	"net/smtp"
+	"os"
 )
 
 func SendMail(to string, subject string, body string) {
 	smtpServer := "smtp.gmail.com"
 	smtpPort := "587" // Typically 587 for TLS or 465 for SSL
-	senderEmail := "salmannugas@gmail.com"
-	senderPassword := "zngslspvujfbnerl"
+	senderEmail := os.Getenv("MAILER_EMAIL")
+	senderPassword := os.Getenv("MAILER_PASSWORD")
 
 	// Message.
 	message := "To: " + to + "\r\n" +

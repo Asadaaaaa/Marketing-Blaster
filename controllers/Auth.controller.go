@@ -22,10 +22,17 @@ func RegisterAuthController(ctx *fiber.Ctx) error {
 
 	errCreateUser := models.DB.Create(&newUser).Error
 	if errCreateUser != nil {
-		return ctx.Status(500).SendString(errCreateUser.Error())
+		return ctx.Status(500).JSON(fiber.Map{
+			"message": "Somthing went wrong",
+			"type":    "controller",
+			"err": fiber.Map{
+				"code": -1,
+			},
+		})
 	}
+
 	return ctx.Status(200).JSON(fiber.Map{
-		"message": "success",
+		"message": "Success",
 	})
 }
 
@@ -39,20 +46,40 @@ func LoginAuthController(ctx *fiber.Ctx) error {
 	var newUser models.User
 	err := models.DB.Where("email = ?", user.Email).First(&newUser).Error
 	if err != nil {
-		return ctx.Status(500).SendString(err.Error())
+		return ctx.Status(404).JSON(fiber.Map{
+			"message": "Email or Password is wrong",
+			"type":    "controller",
+			"err": fiber.Map{
+				"code": -1,
+			},
+		})
 	}
 
 	if newUser.Password != user.Password {
-		return ctx.Status(500).SendString("Password is wrong")
+		return ctx.Status(404).JSON(fiber.Map{
+			"message": "Email or Password is wrong",
+			"type":    "controller",
+			"err": fiber.Map{
+				"code": -1,
+			},
+		})
 	}
 
 	token, err := services.GenerateToken(int(newUser.ID))
 	if err != nil {
-		return ctx.Status(500).SendString(err.Error())
+		return ctx.Status(500).JSON(fiber.Map{
+			"message": "Somthing went wrong with generate token",
+			"type":    "controller",
+			"err": fiber.Map{
+				"code": -2,
+			},
+		})
 	}
 
 	return ctx.Status(200).JSON(fiber.Map{
-		"message": "success",
-		"token":   token,
+		"message": "Success",
+		"data": fiber.Map{
+			"token": token,
+		},
 	})
 }

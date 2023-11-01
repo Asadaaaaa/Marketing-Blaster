@@ -17,5 +17,5 @@ func RouteMailer(app *fiber.App, routePrefix string) {
 	// Register Route
 	app.Post(routePrefix+"/send", middlewares.AuthorizationMiddleware, controllers.SendMailerController)
 	app.Post(routePrefix+"/ai/body", middlewares.AuthorizationMiddleware, controllers.AIGetBodyController)
-	app.Post(routePrefix+"/ai/send", middlewares.AuthorizationMiddleware, controllers.AIGetBodyController)
+	app.Post(routePrefix+"/ai/send", middlewares.AuthorizationMiddleware, controllers.SendWithAIController)
 }
